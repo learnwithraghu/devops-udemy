@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AWS Use Case Builder</title>
+    <link rel="stylesheet" href="../builder.css" />
+  </head>
+  <body data-usecase="ha-webapp">
+    <div class="page">
+      <header class="header">
+        <div>
+          <h1 id="title">Architecture Builder</h1>
+          <p id="summary"></p>
+        </div>
+        <div class="actions">
+          <a href="../../index.html"><button class="secondary">Back Home</button></a>
+          <button id="checkBtn">Check Solution</button>
+          <button id="autoBtn" class="secondary">Auto Resolve</button>
+          <button id="resetBtn" class="secondary">Reset</button>
+        </div>
+      </header>
+      <div class="layout">
+        <aside class="panel">
+          <h2>Builder</h2>
+          <p id="selectedText">Pick a service then click a slot.</p>
+          <div class="mode-switch">
+            <button id="guidedBtn" class="small active">Guided</button>
+            <button id="examBtn" class="small secondary">Exam</button>
+          </div>
+          <div id="required" class="required"></div>
+          <div id="palette"></div>
+          <div id="progress" class="result"></div>
+          <div id="result" class="result"></div>
+        </aside>
+        <section class="canvas-wrap">
+          <div id="canvas" class="canvas">
+            <div id="lines"></div>
+          </div>
+        </section>
+      </div>
+    </div>
+    <script src="../usecase-data.js"></script>
+    <script src="../builder.js"></script>
+  </body>
+</html>

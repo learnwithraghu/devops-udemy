@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AWS Architecture Practice Lab</title>
+    <link rel="stylesheet" href="site.css" />
+  </head>
+  <body>
+    <header class="hero">
+      <p class="kicker">AWS Architecture Practice Lab</p>
+      <h1>Static S3-Ready Practice Website</h1>
+      <p>One HTML page per use case, each with local icons. Upload this folder to S3 and publish.</p>
+    </header>
+
+    <main class="sections">
+      <section class="section-card">
+        <h2>1. Core Web Patterns</h2>
+        <a href="usecases/ha-webapp/index.html">Highly Available Web App</a>
+      </section>
+      <section class="section-card">
+        <h2>2. Network Egress</h2>
+        <a href="usecases/nat-egress/index.html">Private Subnet NAT Egress</a>
+      </section>
+      <section class="section-card">
+        <h2>3. Edge Patterns</h2>
+        <a href="usecases/edge-api-static/index.html">Edge API + Static Delivery</a>
+      </section>
+      <section class="section-card">
+        <h2>4. Data Security</h2>
+        <a href="usecases/private-rds/index.html">Private RDS Access</a>
+      </section>
+      <section class="section-card">
+        <h2>5. CDN and Storage</h2>
+        <a href="usecases/cdn-s3-static/index.html">CloudFront + S3 Static Site</a>
+      </section>
+      <section class="section-card">
+        <h2>6. API Front Door</h2>
+        <a href="usecases/api-to-ec2/index.html">API Gateway to EC2</a>
+      </section>
+      <section class="section-card">
+        <h2>7. App and Database</h2>
+        <a href="usecases/ec2-to-rds/index.html">EC2 to RDS Pattern</a>
+      </section>
+      <section class="section-card">
+        <h2>8. Logging Pipeline</h2>
+        <a href="usecases/s3-log-pipeline/index.html">S3 Log Collection Pattern</a>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <p>Deploy tip: upload all files to an S3 bucket with static website hosting enabled.</p>
+    </footer>
+  </body>
+</html>
