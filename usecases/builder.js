@@ -1,17 +1,20 @@
 (function () {
   const slug = document.body.dataset.usecase;
   const data = window.USECASE_DATA?.[slug];
-  const palette = window.PALETTE || [];
+  const allPalette = window.PALETTE || [];
 
   if (!data) {
     document.body.innerHTML = "<p>Use case not found.</p>";
     return;
   }
+  
+  // Filter palette to only required icons
+  const requiredIconIds = new Set(data.slots.map(s => s.expected));
+  const palette = allPalette.filter(p => requiredIconIds.has(p.id));
 
   const state = {
     placements: {},
     selectedIconId: null,
-    mode: "guided",
     result: null
   };
 
@@ -21,7 +24,6 @@
     canvas: document.getElementById("canvas"),
     lines: document.getElementById("lines"),
     palette: document.getElementById("palette"),
-    required: document.getElementById("required"),
     result: document.getElementById("result"),
     progress: document.getElementById("progress"),
     selectedText: document.getElementById("selectedText")
@@ -30,7 +32,23 @@
   const iconById = Object.fromEntries(palette.map((p) => [p.id, p]));
 
   el.title.textContent = data.title;
-  el.summary.textContent = "Use case: " + data.summary;
+  el.summary.textContent = `Scenario: ${data.summary} Objective: Place each AWS service in the correct layer of the architecture.`;
+
+  // Start in scenario mode
+  const canvasWrap = document.querySelector('.canvas-wrap');
+  if (canvasWrap) {
+    canvasWrap.classList.add('scenario-mode');
+  }
+  
+  const startBtn = document.getElementById('startBtn');
+  if (startBtn) {
+    startBtn.addEventListener('click', () => {
+      if (canvasWrap) canvasWrap.classList.remove('scenario-mode');
+      startBtn.style.display = 'none';
+      // Small focus hint
+      el.palette.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    });
+  }
 
   function iconPath(filename) {
     return "./icons/" + filename;
@@ -39,13 +57,6 @@
   function expectedLabel(slot) {
     const p = iconById[slot.expected];
     return p ? p.label : slot.expected;
-  }
-
-  function renderRequired() {
-    const items = data.slots
-      .map((slot) => `<li><strong>${slot.label}:</strong> ${expectedLabel(slot)}</li>`)
-      .join("");
-    el.required.innerHTML = `<h3>Required Icons (Correct Mapping)</h3><ul>${items}</ul>`;
   }
 
   function renderPalette() {
@@ -70,34 +81,52 @@
 
   function renderSelected() {
     const selected = iconById[state.selectedIconId];
-    el.selectedText.textContent = selected ? `Selected ${selected.label}` : "Pick a service then click a slot.";
+    if (selected) {
+      el.selectedText.textContent = `Selected: ${selected.label}. Choose a matching slot in the workspace.`;
+      return;
+    }
+
+    el.selectedText.textContent = "Choose a service, then place it where it belongs in the architecture.";
   }
 
   function evaluate() {
     let score = 0;
-    const missing = [];
+    const incorrect = [];
     data.slots.forEach((slot) => {
       if (state.placements[slot.id] === slot.expected) score += 1;
-      else missing.push(slot.label);
+      else incorrect.push(slot);
     });
-    state.result = { score, total: data.slots.length, missing };
+    state.result = {
+      score,
+      total: data.slots.length,
+      incorrect,
+      missing: incorrect.map((slot) => slot.label)
+    };
   }
 
   function renderResult() {
     const placed = Object.keys(state.placements).length;
-    el.progress.textContent = `Progress: ${placed}/${data.slots.length} slots.`;
+    el.progress.textContent = `Progress: ${placed} of ${data.slots.length} services placed.`;
 
     if (!state.result) {
-      el.result.textContent = "Build the architecture and click Check Solution.";
+      el.result.textContent = "Start with the entry point of the architecture, then place compute and database services.";
       return;
     }
 
     if (state.result.score === state.result.total) {
-      el.result.textContent = "Perfect. Your architecture matches the expected design.";
+      el.result.textContent = "🎉 Excellent work! Your architecture matches the expected design perfectly.";
+      document.body.classList.add('celebration-active');
       return;
     }
+    document.body.classList.remove('celebration-active');
 
-    el.result.textContent = `Score: ${state.result.score}/${state.result.total}. Missing or incorrect: ${state.result.missing.join(", ")}.`;
+    const firstIncorrect = state.result.incorrect[0];
+    const coaching = firstIncorrect
+      ? `${firstIncorrect.label} usually maps to ${expectedLabel(firstIncorrect)}.`
+      : "Review the highlighted services and layer roles.";
+    const remaining = state.result.total - state.result.score;
+    const noun = remaining === 1 ? "service" : "services";
+    el.result.textContent = `Good progress. ${remaining} ${noun} still need attention. Hint: ${coaching}`;
   }
 
   function renderZones() {
@@ -108,9 +137,7 @@
       zone.style.top = z.y + "%";
       zone.style.width = z.w + "%";
       zone.style.height = z.h + "%";
-      if (state.mode !== "exam") {
-        zone.innerHTML = `<label>${z.label}</label>`;
-      }
+      zone.innerHTML = `<label>${z.label}</label>`;
       el.canvas.appendChild(zone);
     });
   }
@@ -137,13 +164,13 @@
       paths.push(`
         <g>
           <path d="${p.d}" fill="none" stroke="#5e6f8a" stroke-opacity="0.8" stroke-width="2.5" marker-end="url(#arrowhead)" />
-          ${state.mode !== "exam" ? `<rect x="${p.lx - w / 2}" y="${p.ly - 12}" width="${w}" height="16" rx="4" class="line-label-bg"></rect><text x="${p.lx}" y="${p.ly}" text-anchor="middle" class="line-label">${label}</text>` : ""}
+          <rect x="${p.lx - w / 2}" y="${p.ly - 12}" width="${w}" height="16" rx="4" class="line-label-bg"></rect><text x="${p.lx}" y="${p.ly}" text-anchor="middle" class="line-label">${label}</text>
         </g>
       `);
     });
 
     el.lines.innerHTML = `
-      <svg viewBox="0 0 1200 700" preserveAspectRatio="none" class="lines" aria-hidden="true">
+      <svg viewBox="0 0 1200 700" preserveAspectRatio="none" class="lines-layer" aria-hidden="true">
         <defs>
           <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
             <polygon points="0 0, 10 3.5, 0 7" fill="#5e6f8a" />
@@ -172,9 +199,15 @@
       slot.style.top = s.y + "%";
       slot.tabIndex = 0;
       slot.setAttribute("role", "button");
+      slot.setAttribute(
+        "aria-label",
+        placed
+          ? `${s.label} slot, placed ${iconById[placed].label}`
+          : `${s.label} slot, empty`
+      );
       slot.innerHTML = `
-        <div class="drop">${placed ? `<img src="${iconPath(iconById[placed].icon)}" alt="${s.label}">` : `<span>${state.mode === "guided" ? s.hint : "?"}</span>`}</div>
-        ${state.mode === "guided" ? `<div class="slot-title">${s.label}</div>` : ""}
+        <div class="drop">${placed ? `<img src="${iconPath(iconById[placed].icon)}" alt="${s.label}">` : `<span>${s.hint}</span>`}</div>
+        ${placed ? `<div class="slot-title">${iconById[placed].label}</div>` : ''}
       `;
       slot.addEventListener("dragover", (e) => {
         e.preventDefault();
@@ -217,29 +250,18 @@
   document.getElementById("resetBtn").addEventListener("click", () => {
     state.placements = {};
     state.result = null;
+    document.body.classList.remove('celebration-active');
     render();
   });
 
-  document.getElementById("autoBtn").addEventListener("click", () => {
-    state.placements = Object.fromEntries(data.slots.map((s) => [s.id, s.expected]));
-    evaluate();
-    render();
-  });
+  const autoBtn = document.getElementById("autoBtn");
+  if (autoBtn) {
+    autoBtn.addEventListener("click", () => {
+      state.placements = Object.fromEntries(data.slots.map((s) => [s.id, s.expected]));
+      evaluate();
+      render();
+    });
+  }
 
-  document.getElementById("guidedBtn").addEventListener("click", () => {
-    state.mode = "guided";
-    document.getElementById("guidedBtn").classList.add("active");
-    document.getElementById("examBtn").classList.remove("active");
-    render();
-  });
-
-  document.getElementById("examBtn").addEventListener("click", () => {
-    state.mode = "exam";
-    document.getElementById("examBtn").classList.add("active");
-    document.getElementById("guidedBtn").classList.remove("active");
-    render();
-  });
-
-  renderRequired();
   render();
 })();

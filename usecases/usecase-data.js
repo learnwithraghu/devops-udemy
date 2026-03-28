@@ -144,6 +144,168 @@ window.USECASE_DATA = {
       { label: "Storage", x: 54, y: 40, w: 30, h: 32, cls: "zone-data" }
     ],
     links: [["alb", "app", "Requests"], ["app", "s3", "Logs"]]
+  },
+
+  "networking-1": {
+    title: "Public Internet Access",
+    summary: "A startup needs to expose a basic web server to the internet. Route traffic from a Public Subnet through an Internet Gateway.",
+    slots: [
+      { id: "igw", label: "Internet Gateway", hint: "VPC ingress", x: 50, y: 15, expected: "igw" },
+      { id: "rtb", label: "Route Table", hint: "Public Route", x: 50, y: 40, expected: "route" },
+      { id: "ec2", label: "EC2 App", hint: "Web Server", x: 50, y: 70, expected: "ec2" }
+    ],
+    zones: [
+      { label: "VPC", x: 10, y: 5, w: 80, h: 85, cls: "zone-vpc" },
+      { label: "Public Subnet", x: 20, y: 30, w: 60, h: 55, cls: "zone-public" }
+    ],
+    links: [
+      ["igw", "rtb", "0.0.0.0/0"],
+      ["rtb", "ec2", "Local Route"]
+    ]
+  },
+  "networking-2": {
+    title: "Private Egress via NAT",
+    summary: "Your database tier needs to securely download patches. Route outbound traffic through a NAT Gateway.",
+    slots: [
+      { id: "igw", label: "Internet Gateway", hint: "VPC edge", x: 50, y: 12, expected: "igw" },
+      { id: "nat", label: "NAT Gateway", hint: "Outbound Proxy", x: 50, y: 38, expected: "nat" },
+      { id: "rtb", label: "Route Table", hint: "Private Route", x: 50, y: 62, expected: "route" },
+      { id: "rds", label: "Database", hint: "Private instance", x: 50, y: 85, expected: "rds" }
+    ],
+    zones: [
+      { label: "VPC", x: 5, y: 4, w: 90, h: 92, cls: "zone-vpc" },
+      { label: "Public Subnet", x: 10, y: 25, w: 80, h: 25, cls: "zone-public" },
+      { label: "Private Subnet", x: 10, y: 55, w: 80, h: 40, cls: "zone-private" }
+    ],
+    links: [
+      ["rds", "rtb", "Outbound"],
+      ["rtb", "nat", "0.0.0.0/0"],
+      ["nat", "igw", "Egress"]
+    ]
+  },
+  "networking-3": {
+    title: "Inter-Team VPC Peering",
+    summary: "The Data team needs secure access to the Analytics team's VPC avoiding the public internet.",
+    slots: [
+      { id: "app1", label: "Data App", hint: "VPC A Compute", x: 25, y: 50, expected: "ec2" },
+      { id: "peer", label: "VPC Peering", hint: "Private Link", x: 50, y: 50, expected: "vpc_peering" },
+      { id: "app2", label: "Analytics DB", hint: "VPC B Database", x: 75, y: 50, expected: "rds" }
+    ],
+    zones: [
+      { label: "Data VPC (10.0.0.0/16)", x: 10, y: 25, w: 30, h: 50, cls: "zone-private" },
+      { label: "Analytics VPC (10.1.0.0/16)", x: 60, y: 25, w: 30, h: 50, cls: "zone-data" }
+    ],
+    links: [
+      ["app1", "peer", "10.1.0.0/16"],
+      ["peer", "app2", "10.0.0.0/16"]
+    ]
+  },
+  "networking-4": {
+    title: "Site-to-Site VPN",
+    summary: "Establish an encrypted IPsec tunnel connecting an on-premises data center to your cloud VPC.",
+    slots: [
+      { id: "cgw", label: "Customer Gateway", hint: "On-Prem Endpoint", x: 20, y: 50, expected: "cgw" },
+      { id: "vpn", label: "VPN Connection", hint: "IPsec Tunnel", x: 50, y: 50, expected: "vpn" },
+      { id: "vgw", label: "Virtual Private Gateway", hint: "AWS Endpoint", x: 80, y: 50, expected: "vgw" }
+    ],
+    zones: [
+      { label: "Corporate Data Center", x: 5, y: 20, w: 30, h: 60, cls: "zone-edge" },
+      { label: "AWS Region", x: 65, y: 20, w: 30, h: 60, cls: "zone-vpc" }
+    ],
+    links: [
+      ["cgw", "vpn", "IPsec"],
+      ["vpn", "vgw", "Tunnels"]
+    ]
+  },
+  "networking-5": {
+    title: "Direct Connect Dedicated",
+    summary: "Establish a dedicated, high-speed connection from on-premises to AWS.",
+    slots: [
+      { id: "router", label: "Customer Router", hint: "On-Prem Router", x: 20, y: 50, expected: "cgw" },
+      { id: "dx", label: "Direct Connect", hint: "Physical Fiber", x: 50, y: 50, expected: "dx" },
+      { id: "vgw", label: "Virtual Private Gateway", hint: "AWS Gateway", x: 80, y: 50, expected: "vgw" }
+    ],
+    zones: [
+      { label: "Data Center", x: 5, y: 20, w: 30, h: 60, cls: "zone-edge" },
+      { label: "AWS Cloud", x: 65, y: 20, w: 30, h: 60, cls: "zone-vpc" }
+    ],
+    links: [
+      ["router", "dx", "Cross Connect"],
+      ["dx", "vgw", "VIF"]
+    ]
+  },
+  "networking-6": {
+    title: "Gateway VPC Endpoints",
+    summary: "Massive backups sent to S3 must never traverse the internet. Use a Gateway Endpoint.",
+    slots: [
+      { id: "app", label: "EC2 App", hint: "Private Backup Job", x: 30, y: 50, expected: "ec2" },
+      { id: "vpce", label: "S3 Gateway Endpoint", hint: "VPC Router", x: 50, y: 30, expected: "vpc_endpoint" },
+      { id: "s3", label: "S3 Bucket", hint: "Backup Storage", x: 70, y: 50, expected: "s3" }
+    ],
+    zones: [
+      { label: "VPC", x: 10, y: 15, w: 60, h: 70, cls: "zone-vpc" },
+      { label: "Private Subnet", x: 15, y: 35, w: 30, h: 40, cls: "zone-private" },
+      { label: "AWS Global Network", x: 65, y: 35, w: 30, h: 40, cls: "zone-edge" }
+    ],
+    links: [
+      ["app", "vpce", "Prefix List"],
+      ["vpce", "s3", "Private AWS Link"]
+    ]
+  },
+  "networking-7": {
+    title: "AWS PrivateLink",
+    summary: "Connect internal workloads privately to SaaS applications or APIs using Interface Endpoints.",
+    slots: [
+      { id: "app", label: "EC2 Service", hint: "Internal Consumer", x: 30, y: 50, expected: "ec2" },
+      { id: "vpce", label: "Interface Endpoint", hint: "ENI Injection", x: 50, y: 50, expected: "vpc_endpoint" },
+      { id: "api", label: "API Provider", hint: "SaaS Service", x: 75, y: 50, expected: "api" }
+    ],
+    zones: [
+      { label: "Consumer VPC", x: 10, y: 25, w: 50, h: 50, cls: "zone-vpc" },
+      { label: "Provider VPC", x: 65, y: 25, w: 30, h: 50, cls: "zone-edge" }
+    ],
+    links: [
+      ["app", "vpce", "TCP 443"],
+      ["vpce", "api", "VPC Endpoint Service"]
+    ]
+  },
+  "networking-8": {
+    title: "Network Load Balancing",
+    summary: "Expose a high-throughput, ultra-low latency TCP service using an NLB.",
+    slots: [
+      { id: "igw", label: "Internet Gateway", hint: "VPC Ingress", x: 50, y: 15, expected: "igw" },
+      { id: "nlb", label: "Network Load Balancer", hint: "L4 Balancing", x: 50, y: 45, expected: "nlb" },
+      { id: "app1", label: "Compute Node A", hint: "App Target", x: 35, y: 75, expected: "ec2" },
+      { id: "app2", label: "Compute Node B", hint: "App Target", x: 65, y: 75, expected: "ec2" }
+    ],
+    zones: [
+      { label: "VPC", x: 10, y: 5, w: 80, h: 90, cls: "zone-vpc" },
+      { label: "Public Subnet", x: 20, y: 30, w: 60, h: 30, cls: "zone-public" },
+      { label: "Private Subnet", x: 20, y: 65, w: 60, h: 25, cls: "zone-private" }
+    ],
+    links: [
+      ["igw", "nlb", "TCP Port"],
+      ["nlb", "app1", "Forwarding"],
+      ["nlb", "app2", "Forwarding"]
+    ]
+  },
+  "networking-9": {
+    title: "Transit Gateway Hub & Spoke",
+    summary: "Simplify complex routing by centralizing connections through a single AWS Transit Gateway connecting 3 VPCs.",
+    slots: [
+      { id: "tgw", label: "Transit Gateway", hint: "Central Hub", x: 50, y: 50, expected: "tgw" },
+      { id: "app1", label: "VPC A", hint: "Compute Spoke", x: 20, y: 25, expected: "ec2" },
+      { id: "app2", label: "VPC B", hint: "Data Spoke", x: 80, y: 25, expected: "rds" },
+      { id: "cgw", label: "Customer On-Prem", hint: "VPN Attachment", x: 50, y: 85, expected: "cgw" }
+    ],
+    zones: [
+      { label: "Hub Route Domain", x: 40, y: 40, w: 20, h: 20, cls: "zone-public" }
+    ],
+    links: [
+      ["app1", "tgw", "Attachment"],
+      ["app2", "tgw", "Attachment"],
+      ["cgw", "tgw", "VPN Attachment"]
+    ]
   }
 };
 
@@ -157,5 +319,15 @@ window.PALETTE = [
   { id: "s3", label: "S3 Bucket", icon: "Res_Amazon-Simple-Storage-Service_Bucket_48.png" },
   { id: "nat", label: "NAT Gateway", icon: "Res_Amazon-VPC_NAT-Gateway_48.png" },
   { id: "api", label: "API Gateway Endpoint", icon: "Res_Amazon-API-Gateway_Endpoint_48.png" },
-  { id: "route", label: "Route Table", icon: "Res_Amazon-Route-53_Route-Table_48.png" }
+  { id: "route", label: "Route Table", icon: "Res_Amazon-Route-53_Route-Table_48.png" },
+
+  { id: "vpc_peering", label: "VPC Peering Connection", icon: "Res_Amazon-VPC_Peering-Connection_48.png" },
+  { id: "vgw", label: "Virtual Private Gateway", icon: "Res_Amazon-VPC_VPN-Gateway_48.png" },
+  { id: "cgw", label: "Customer Gateway", icon: "Res_Amazon-VPC_Customer-Gateway_48.png" },
+  { id: "tgw", label: "Transit Gateway", icon: "Arch_AWS-Transit-Gateway_48.png" },
+  { id: "vpc_endpoint", label: "VPC Endpoint", icon: "Res_Amazon-VPC_Endpoints_48.png" },
+  { id: "nlb", label: "Network Load Balancer", icon: "Res_Elastic-Load-Balancing_Network-Load-Balancer_48.png" },
+  { id: "dx", label: "Direct Connect", icon: "Arch_AWS-Direct-Connect_48.png" },
+  { id: "vpn", label: "Site-to-Site VPN", icon: "Res_Amazon-VPC_VPN-Connection_48.png" }
+
 ];

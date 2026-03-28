@@ -3,53 +3,49 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>AWS Architecture Practice Lab</title>
+    <title>CloudArchitect: Interactive AWS Sandbox</title>
     <link rel="stylesheet" href="site.css" />
   </head>
   <body>
     <header class="hero">
-      <p class="kicker">AWS Architecture Practice Lab</p>
-      <h1>Static S3-Ready Practice Website</h1>
-      <p>One HTML page per use case, each with local icons. Upload this folder to S3 and publish.</p>
+      <p class="kicker">Master AWS Architecture</p>
+      <h1>CloudArchitect: Interactive AWS Sandbox</h1>
+      <p>Select a specialized mastery track to begin building production-grade AWS solutions in a hands-on sandbox environment.</p>
     </header>
 
     <main class="sections">
-      <section class="section-card">
-        <h2>1. Core Web Patterns</h2>
-        <a href="usecases/ha-webapp/index.html">Highly Available Web App</a>
+      <div class="category-header" style="grid-column: 1 / -1; margin-bottom: 24px;">
+        <h2 style="font-size: 1.75rem; font-weight: 800; color: #0f172a; text-align: center;">🚀 Mastery Tracks</h2>
+        <p style="color: var(--muted); margin-top: 8px; text-align: center; max-width: 600px; margin-left: auto; margin-right: auto;">Step into real-world scenarios across specialized AWS domains. Each track features progressive challenges to level up your architect skills.</p>
+      </div>
+
+      <!-- Cloud Foundation Track Card -->
+      <section class="section-card" style="border: 2px solid #cbd5e1; background: linear-gradient(to bottom right, #ffffff, #f8fafc);">
+        <div style="font-size: 3rem; margin-bottom: 20px;">🏗️</div>
+        <h2 style="font-size: 1.5rem; margin-bottom: 12px;">Cloud Foundation</h2>
+        <p style="margin-bottom: 24px;">Master 8 essential production patterns for reliable, scalable, and secure cloud environments including HA Web Apps, NAT Egress, and Edge Routing.</p>
+        <a href="usecases/core/index.html" class="button-link" style="width: 100%; text-align: center; justify-content: center; background: #0f172a; color: white;">Explore Track (8 Labs)</a>
       </section>
-      <section class="section-card">
-        <h2>2. Network Egress</h2>
-        <a href="usecases/nat-egress/index.html">Private Subnet NAT Egress</a>
+
+      <!-- Networking Mastery Track Card -->
+      <section class="section-card" style="border: 2px solid var(--brand); background: linear-gradient(to bottom right, #ffffff, #f5f3ff);">
+        <div style="font-size: 3rem; margin-bottom: 20px;">🌍</div>
+        <h2 style="font-size: 1.5rem; margin-bottom: 12px;">Networking Mastery</h2>
+        <p style="margin-bottom: 24px;">Deep dive into advanced cloud connectivity. Explore VPC Peering, Site-to-Site VPNs, PrivateLink, and Transit Gateway across 9 challenging levels.</p>
+        <a href="usecases/networking/index.html" class="button-link" style="width: 100%; text-align: center; justify-content: center; background: var(--brand); color: white;">Enter Track (9 Labs)</a>
       </section>
-      <section class="section-card">
-        <h2>3. Edge Patterns</h2>
-        <a href="usecases/edge-api-static/index.html">Edge API + Static Delivery</a>
-      </section>
-      <section class="section-card">
-        <h2>4. Data Security</h2>
-        <a href="usecases/private-rds/index.html">Private RDS Access</a>
-      </section>
-      <section class="section-card">
-        <h2>5. CDN and Storage</h2>
-        <a href="usecases/cdn-s3-static/index.html">CloudFront + S3 Static Site</a>
-      </section>
-      <section class="section-card">
-        <h2>6. API Front Door</h2>
-        <a href="usecases/api-to-ec2/index.html">API Gateway to EC2</a>
-      </section>
-      <section class="section-card">
-        <h2>7. App and Database</h2>
-        <a href="usecases/ec2-to-rds/index.html">EC2 to RDS Pattern</a>
-      </section>
-      <section class="section-card">
-        <h2>8. Logging Pipeline</h2>
-        <a href="usecases/s3-log-pipeline/index.html">S3 Log Collection Pattern</a>
+
+      <!-- Security Mastery Card (Locked) -->
+      <section class="section-card" style="opacity: 0.6; filter: grayscale(1); border: 1px dashed #cbd5e1;">
+        <div style="font-size: 3rem; margin-bottom: 20px;">🔒</div>
+        <h2 style="font-size: 1.5rem; margin-bottom: 12px;">Security Mastery</h2>
+        <p style="margin-bottom: 24px;">Advanced strategies for identity, encryption, and perimeter defense across common AWS architectures.</p>
+        <a href="#" class="button-link" style="width: 100%; text-align: center; justify-content: center; pointer-events: none; background: #94a3b8; color: white;">Coming Soon</a>
       </section>
     </main>
 
     <footer class="footer">
-      <p>Deploy tip: upload all files to an S3 bucket with static website hosting enabled.</p>
+      <p>CloudArchitect Sandbox © 2026. Master the Cloud by Building it.</p>
     </footer>
   </body>
 </html>

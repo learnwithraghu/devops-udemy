@@ -1,2 +1,62 @@
 <!doctype html>
-<html lang="en"><head><meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><title>AWS Use Case Builder</title><link rel="stylesheet" href="../builder.css" /></head><body data-usecase="ec2-to-rds"><div class="page"><header class="header"><div><h1 id="title">Architecture Builder</h1><p id="summary"></p></div><div class="actions"><a href="../../index.html"><button class="secondary">Back Home</button></a><button id="checkBtn">Check Solution</button><button id="autoBtn" class="secondary">Auto Resolve</button><button id="resetBtn" class="secondary">Reset</button></div></header><div class="layout"><aside class="panel"><h2>Builder</h2><p id="selectedText">Pick a service then click a slot.</p><div class="mode-switch"><button id="guidedBtn" class="small active">Guided</button><button id="examBtn" class="small secondary">Exam</button></div><div id="required" class="required"></div><div id="palette"></div><div id="progress" class="result"></div><div id="result" class="result"></div></aside><section class="canvas-wrap"><div id="canvas" class="canvas"><div id="lines"></div></div></section></div></div><script src="../usecase-data.js"></script><script src="../builder.js"></script></body></html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>CloudArchitect | EC2 to RDS Pattern</title>
+		<link rel="stylesheet" href="../builder.css" />
+	</head>
+	<body data-usecase="ec2-to-rds">
+		<div class="page">
+			<header class="header">
+				<div>
+					<h1 id="title">AWS Architecture Practice Lab</h1>
+					<p id="summary">Build the correct AWS architecture by placing each service in the right part of the solution.</p>
+					<button id="startBtn" class="primary" style="margin-top: 12px; margin-bottom: 6px; font-size: 1.1rem; padding: 12px 24px; border-radius: 12px;">Start Building 🚀</button>
+					</div>
+
+				<nav class="actions" aria-label="Page actions">
+					<div class="nav-cluster">
+						<a href="../../index.html" class="secondary button-link" title="CloudArchitect Home">🏠</a>
+						<a href="../core/index.html" class="secondary button-link">← Foundation Hub</a>
+					</div>
+					<div class="nav-cluster">
+						<button id="checkBtn" type="button" class="primary">Check My Architecture</button>
+						<button id="autoBtn" type="button" class="secondary">Show Correct Answer</button>
+						<button id="resetBtn" type="button" class="secondary">Try Again</button>
+					</div>
+				</nav>
+			</header>
+
+			<main class="layout">
+				<aside class="panel" aria-labelledby="builderHeading">
+					<h2 id="builderHeading">Builder</h2>
+
+					<p id="selectedText">Choose a service, then place it where it belongs in the architecture.</p>
+
+
+					<section aria-labelledby="paletteHeading">
+						<h3 id="paletteHeading">Service Palette</h3>
+						<div id="palette"></div>
+					</section>
+
+					<section aria-labelledby="feedbackHeading">
+						<h3 id="feedbackHeading">Feedback</h3>
+						<div id="progress" class="result" aria-live="polite" aria-atomic="true"></div>
+						<div id="result" class="result" aria-live="polite" aria-atomic="true"></div>
+					</section>
+				</aside>
+
+				<section class="canvas-wrap" aria-labelledby="workspaceHeading">
+					<h2 id="workspaceHeading" class="sr-only">Architecture Workspace</h2>
+					<div id="canvas" class="canvas" role="region" aria-label="Architecture building canvas">
+						<div id="lines"></div>
+					</div>
+				</section>
+			</main>
+		</div>
+
+		<script src="../usecase-data.js"></script>
+		<script src="../builder.js"></script>
+	</body>
+</html>
