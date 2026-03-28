@@ -1,0 +1,29 @@
+{
+  "name": "devops-udemy",
+  "version": "1.0.0",
+  "description": "python3 -m http.server 8080",
+  "main": "index.js",
+  "scripts": {
+    "test": "npx playwright test",
+    "test:chromium": "npx playwright test --project=chromium-desktop",
+    "test:webkit": "npx playwright test --project=webkit-desktop",
+    "test:mobile": "npx playwright test --project=chromium-mobile",
+    "test:tablet": "npx playwright test --project=chromium-tablet",
+    "test:wide": "npx playwright test --project=chromium-wide",
+    "test:hub": "npx playwright test tests/networking/hub.spec.js --project=chromium-desktop",
+    "test:structure": "npx playwright test tests/networking/lab-structure.spec.js --project=chromium-desktop",
+    "test:interactions": "npx playwright test tests/networking/interactions.spec.js --project=chromium-desktop",
+    "test:visual": "npx playwright test tests/networking/visual-regression.spec.js --project=chromium-desktop",
+    "test:responsive": "npx playwright test tests/networking/responsive.spec.js --project=chromium-desktop",
+    "test:performance": "npx playwright test tests/networking/performance.spec.js --project=chromium-desktop",
+    "test:integration": "npx playwright test tests/networking/integration.spec.js --project=chromium-desktop",
+    "test:update-snapshots": "npx playwright test tests/networking/visual-regression.spec.js --project=chromium-desktop --update-snapshots",
+    "test:report": "npx playwright show-report tests/report"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@playwright/test": "^1.58.2"
+  }
+}

@@ -44,14 +44,31 @@
         font-size: 0.95rem;
         color: var(--muted);
         line-height: 1.5;
+        flex-grow: 1;
+      }
+      .card .level-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 4px;
       }
       .card .level-tag {
         font-size: 0.75rem;
         font-weight: 800;
         text-transform: uppercase;
         color: #94a3b8;
-        margin-bottom: 4px;
       }
+      .difficulty-badge {
+        font-size: 0.65rem;
+        font-weight: 800;
+        text-transform: uppercase;
+        padding: 2px 8px;
+        border-radius: 20px;
+        letter-spacing: 0.05em;
+      }
+      .badge-easy { background: #dcfce7; color: #166534; }
+      .badge-medium { background: #fef3c7; color: #92400e; }
+      .badge-hard { background: #fee2e2; color: #991b1b; }
     </style>
   </head>
   <body>
@@ -63,45 +80,69 @@
 
     <main style="padding: 0 20px 60px;">
       <div class="card-grid">
-        <a href="../ha-webapp/" class="card">
-          <div class="level-tag">Level 1</div>
-          <h3>Highly Available Web App</h3>
-          <p>Multi-AZ web tier with ELB and RDS.</p>
+        <a href="../cdn-s3-static/index.html" class="card">
+          <div class="level-header">
+            <div class="level-tag">Level 1</div>
+            <div class="difficulty-badge badge-easy">Easy</div>
+          </div>
+          <h3>Global Static Delivery</h3>
+          <p>Origin-to-edge content orchestration using S3 and CloudFront.</p>
         </a>
-        <a href="../nat-egress/" class="card">
-          <div class="level-tag">Level 2</div>
-          <h3>Private Subnet NAT Egress</h3>
-          <p>Secure outbound internet for private workloads.</p>
+        <a href="../ec2-to-rds/index.html" class="card">
+          <div class="level-header">
+            <div class="level-tag">Level 2</div>
+            <div class="difficulty-badge badge-easy">Easy</div>
+          </div>
+          <h3>Two-Tier Production Hub</h3>
+          <p>Standard application-to-database integration within a VPC.</p>
         </a>
-        <a href="../edge-api-static/" class="card">
-          <div class="level-tag">Level 3</div>
-          <h3>Edge API + Static Delivery</h3>
-          <p>Route 53, CloudFront and API Gateway.</p>
+        <a href="../s3-log-pipeline/index.html" class="card">
+          <div class="level-header">
+            <div class="level-tag">Level 3</div>
+            <div class="difficulty-badge badge-medium">Medium</div>
+          </div>
+          <h3>Secure Log Collection</h3>
+          <p>Distributed compute instances writing to centralized object storage.</p>
         </a>
-        <a href="../private-rds/" class="card">
-          <div class="level-tag">Level 4</div>
-          <h3>Private RDS Access</h3>
-          <p>Isolate databases in private subnets.</p>
+        <a href="../private-rds/index.html" class="card">
+          <div class="level-header">
+            <div class="level-tag">Level 4</div>
+            <div class="difficulty-badge badge-medium">Medium</div>
+          </div>
+          <h3>Tier-Isolating DB Access</h3>
+          <p>Architectural segmentation of database resources for maximum security.</p>
         </a>
-        <a href="../cdn-s3-static/" class="card">
-          <div class="level-tag">Level 5</div>
-          <h3>CloudFront + S3 Static Site</h3>
-          <p>Global static asset delivery.</p>
+        <a href="../api-to-ec2/index.html" class="card">
+          <div class="level-header">
+            <div class="level-tag">Level 5</div>
+            <div class="difficulty-badge badge-medium">Medium</div>
+          </div>
+          <h3>Serverless API Frontend</h3>
+          <p>Managed API Gateway to internal VPC compute routing.</p>
         </a>
-        <a href="../api-to-ec2/" class="card">
-          <div class="level-tag">Level 6</div>
-          <h3>API Gateway to EC2</h3>
-          <p>Public APIs routing to internal compute.</p>
+        <a href="../nat-egress/index.html" class="card">
+          <div class="level-header">
+            <div class="level-tag">Level 6</div>
+            <div class="difficulty-badge badge-hard">Hard</div>
+          </div>
+          <h3>Secure Private Egress</h3>
+          <p>Orchestrating outbound traffic for isolated workloads via NAT.</p>
         </a>
-        <a href="../ec2-to-rds/" class="card">
-          <div class="level-tag">Level 7</div>
-          <h3>EC2 to RDS Pattern</h3>
-          <p>Secure app-to-db internal routing.</p>
+        <a href="../ha-webapp/index.html" class="card">
+          <div class="level-header">
+            <div class="level-tag">Level 7</div>
+            <div class="difficulty-badge badge-hard">Hard</div>
+          </div>
+          <h3>High Availability Enterprise</h3>
+          <p>Multi-AZ regional architecture with full-stack redundancy.</p>
         </a>
-        <a href="../s3-log-pipeline/" class="card">
-          <div class="level-tag">Level 8</div>
-          <h3>S3 Log Collection</h3>
-          <p>Centralized ingestion and storage for logs.</p>
+        <a href="../edge-api-static/index.html" class="card">
+          <div class="level-header">
+            <div class="level-tag">Level 8</div>
+            <div class="difficulty-badge badge-hard">Hard</div>
+          </div>
+          <h3>Hybrid Edge Orchestration</h3>
+          <p>Multi-origin CloudFront routing for static and dynamic API traffic.</p>
         </a>
       </div>
     </main>

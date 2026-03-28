@@ -189,6 +189,7 @@
   }
 
   function renderSlots() {
+    console.log("Rendering slots, count:", data.slots.length);
     data.slots.forEach((s) => {
       const slot = document.createElement("div");
       const placed = state.placements[s.id];
@@ -229,6 +230,7 @@
   }
 
   function clearCanvas() {
+    console.log("Clearing canvas...");
     el.canvas.querySelectorAll(".zone,.slot").forEach((n) => n.remove());
   }
 
